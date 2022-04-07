@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WasmDemo.Server.Repository;
 using WasmDemo.Shared;
 
@@ -7,25 +6,25 @@ namespace WasmDemo.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoController : ControllerBase
+    public abstract class AbstractController<TModel> : ControllerBase where TModel : DBModel
     {
-        private readonly IRepository<Todo> _todoRepository;
+        private readonly IRepository<TModel> _repository;
 
-        public TodoController(IRepository<Todo> todoRepository)
+        public AbstractController(IRepository<TModel> repo)
         {
-            _todoRepository = todoRepository;
+            _repository = repo;
         }
-        
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Todo>>> Get()
+        public virtual async Task<ActionResult<IEnumerable<TModel>>> Get()
         {
-            return Ok(await _todoRepository.GetAllAsync());
+            return Ok(await _repository.GetAllAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Todo>> Get(long id)
+        public virtual async Task<ActionResult<TModel>> Get(long id)
         {
-            var Todo = await _todoRepository.GetAsync(id);
+            var Todo = await _repository.GetAsync(id);
             if (Todo == null)
             {
                 return NotFound();
@@ -35,21 +34,21 @@ namespace WasmDemo.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Todo>> Post(Todo Todo)
+        public virtual async Task<ActionResult<TModel>> Post(TModel Todo)
         {
-            var createdTodo = await _todoRepository.CreateAsync(Todo);
+            var createdTodo = await _repository.CreateAsync(Todo);
             return CreatedAtAction(nameof(Get), new { id = createdTodo.Id }, createdTodo);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Todo>> Put(long id, Todo Todo)
+        public virtual async Task<ActionResult<TModel>> Put(long id, TModel Todo)
         {
             if (id != Todo.Id)
             {
                 return BadRequest();
             }
 
-            var updatedTodo = await _todoRepository.UpdateAsync(Todo);
+            var updatedTodo = await _repository.UpdateAsync(Todo);
             if (updatedTodo == null)
             {
                 return NotFound();
@@ -58,9 +57,9 @@ namespace WasmDemo.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> Delete(long id)
+        public virtual async Task<ActionResult<bool>> Delete(long id)
         {
-            var result = await _todoRepository.DeleteAsync(id);
+            var result = await _repository.DeleteAsync(id);
             if (result)
             {
                 return Ok();
