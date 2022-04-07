@@ -6,7 +6,7 @@ namespace WasmDemo.Server.Repository
     {
         protected List<TModel> _inMemoryCollection { get; set; } = new List<TModel>();
 
-        public Task<TModel> CreateAsync(TModel model)
+        public virtual Task<TModel> CreateAsync(TModel model)
         {
             if (model.Id == 0)
             {
@@ -16,7 +16,7 @@ namespace WasmDemo.Server.Repository
             return Task.FromResult(model);
         }
         
-        public Task CreateManyAsync(List<TModel> models)
+        public virtual Task CreateManyAsync(List<TModel> models)
         {
             foreach (var model in models)
             {
@@ -25,7 +25,7 @@ namespace WasmDemo.Server.Repository
             return Task.CompletedTask;
         }
 
-        public Task<bool> DeleteAsync(long id)
+        public virtual Task<bool> DeleteAsync(long id)
         {
             var entityToRemove = _inMemoryCollection.FirstOrDefault(x => x.Id == id);
 
@@ -37,12 +37,12 @@ namespace WasmDemo.Server.Repository
             return Task.FromResult(false);
         }
 
-        public Task<IEnumerable<TModel>> GetAllAsync()
+        public virtual Task<IEnumerable<TModel>> GetAllAsync()
         {
             return Task.FromResult(_inMemoryCollection.AsEnumerable());
         }
 
-        public Task<TModel?> GetAsync(long id)
+        public virtual Task<TModel?> GetAsync(long id)
         {
             var entity = _inMemoryCollection.FirstOrDefault(b => b.Id == id);
 
@@ -54,7 +54,7 @@ namespace WasmDemo.Server.Repository
             return Task.FromResult<TModel?>(null);
         }
 
-        public async Task<TModel?> UpdateAsync(TModel model)
+        public virtual async Task<TModel?> UpdateAsync(TModel model)
         {
             if (await DeleteAsync(model.Id))
             {
