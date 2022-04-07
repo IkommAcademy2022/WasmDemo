@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using JsonName = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 
-public partial class Beer
+public partial class Beer : DBModel
 {
-    [JsonName("id")] public long Id { get; set; }
+    [JsonName("id")] public new long Id { get; set; }
     [JsonName("name")] public string Name { get; set; }
     [JsonName("tagline")] public string Tagline { get; set; }
     [JsonName("first_brewed")] public string FirstBrewed { get; set; }
