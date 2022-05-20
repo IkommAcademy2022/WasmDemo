@@ -4,8 +4,8 @@ namespace WasmDemo.Server.Handlers
 {
     public class RequestHandler<TDto> : IHandler<TDto>
     {
-        private readonly ILogger<RequestHandler<TDto>> _logger;
-        private readonly IRepository<TDto> _repo;
+        private readonly ILogger<RequestHandler<TDto>> _logger = default!;
+        private readonly IRepository<TDto> _repo = default!;
         public CommonResponse<TDto> HandleRequest(CommonRequest request)
         {
             throw new NotImplementedException();
@@ -22,7 +22,7 @@ namespace WasmDemo.Server.Handlers
     {
         public TDto Get()
         {
-            
+            throw new NotImplementedException();
         }
     }
 
@@ -39,10 +39,9 @@ namespace WasmDemo.Server.Handlers
     {
         private static Dictionary<Type, string> _getActions = new()
         {
-            typeof(Beer),
-            "
+            
         };
-        public static CommonResponse<TDto> Get => new(default(TDto));
+        //public static CommonResponse<TDto> Get => new(default(TDto));
     }
 
     public interface IHandler<TDto>
@@ -70,12 +69,12 @@ namespace WasmDemo.Server.Handlers
 
     public class CommonResponse<TData> 
     {
-        public Dictionary<string, object> Metadata { get; set; }
-        public List<TData> Payload { get; set; }
+        public Dictionary<string, object> Metadata { get; set; } = default!;
+        public List<TData> Payload { get; set; } = default!;
 
         public int Rows { get; set; }
         public bool Success { get; set; }
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = default!;
         public Guid CorrelationID { get; set; }
     }
 }

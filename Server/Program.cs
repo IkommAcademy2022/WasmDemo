@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.ResponseCompression;
 using WasmDemo.Server.Repository;
 using WasmDemo.Shared;
 
@@ -33,6 +32,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+builder.Services.AddAuthentication().AddIdentyServerJwt().AddGoogle(o => { 
+    
+});
 
 app.MapRazorPages();
 app.MapControllers();
